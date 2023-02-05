@@ -1,0 +1,39 @@
+using UnityEngine;
+
+public class CharacterController : MonoBehaviour
+{
+    public float speed = 10.0f;
+    public float jumpForce = 10.0f;
+
+    private Rigidbody rigidBody;
+    private bool isGrounded = false;
+
+    void Start()
+    {
+        rigidBody = GetComponent<Rigidbody>();
+    }
+
+    void Update()
+    {
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+
+        Vector3 movement = new Vector3(horizontal, 0.0f, vertical) * speed * Time.deltaTime;
+        transform.position += movement;
+
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            rigidBody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+
+    void OnCollisionStay()
+    {
+        isGrounded = true;
+    }
+
+    void OnCollisionExit()
+    {
+        isGrounded = false;
+    }
+}
